@@ -4,9 +4,9 @@ Aplicar lo aprendido en las **cuatro primeras semanas** en la **réplica más fi
 
 ## Información del proyecto
 
-Texto íntegro del **enunciato** (objetivos, *Defender*, requisitos, bonificación, referencias, recursos cohorte MISW-4407, entregas, recomendaciones y ponderación): **[`docs/enunciado.md`](docs/enunciato.md)**
+**Enunciato** del curso (objetivos, *Defender*, requisitos, referencias y entregas): [`docs/enunciado.md`](docs/enunciado.md)
 
-Los **desgloses por puntos** (excelente/deficiente) siguen en [Rúbricas del proyecto final](#rúbricas-del-proyecto-final). Prioridad: consignas y criterios publicados por docencia.
+Rúbricas y desglose por puntos: [más abajo](#rúbricas-del-proyecto-final).
 
 
 ## Equipo
@@ -17,26 +17,18 @@ Los **desgloses por puntos** (excelente/deficiente) siguen en [Rúbricas del pro
 | Miguel Angel Moreno Páez | [ma.moreno2@uniandes.edu.co](mailto:ma.moreno2@uniandes.edu.co) |
 | Héctor López | [hv.lopez@uniandes.edu.co](mailto:hv.lopez@uniandes.edu.co) |
 
-## Documentación en `docs/` *(un solo `README` en el repo: este archivo)*
+## Documentación
 
-Además del **código**, el curso pide **Markdown** de avance, enlace al repositorio y **arquitectura** del estado del proyecto. Todo se enlaza desde aquí; las guías viven en `docs/` con **nombres descriptivos** (`arquitectura-ecs.md`, `componentes.md`, …), no como más `README.md` anidados.
-
-### Consignas (enunciato)
+### Avance y código fuente
 
 | Archivo | Contenido |
 |---------|-----------|
-| [`docs/enunciado.md`](docs/enunciado.md) | Enunciato del curso (*Defender*, requisitos, recursos cohorte, entregas formativas/sumativa, ponderación). |
+| [`docs/avance-equipo.md`](docs/avance-equipo.md) | Miembros, roles y trabajo. |
+| [`docs/enlace-codigo-fuente.md`](docs/enlace-codigo-fuente.md) | Repositorio Git y, si aplica, entrega en `.zip`. |
 
-### Entregables habituales
+### Arquitectura
 
-| Archivo | Contenido |
-|---------|-----------|
-| [`docs/avance-equipo.md`](docs/avance-equipo.md) | **Avance**: miembros, **rol** y trabajo reciente. |
-| [`docs/enlace-codigo-fuente.md`](docs/enlace-codigo-fuente.md) | **URL del repositorio** (Git) y/o política de **`.zip`** si el curso lo exige. |
-
-### Arquitectura (`docs/arquitectura/`)
-
-Debe poder leerse **antes** del post-mortem final y puede repartirse en varios `.md`. **Mapa enunciato ↔ código** y guías técnicas:
+Carpeta [`docs/arquitectura/`](docs/arquitectura/):
 
 | Archivo | Contenido |
 |---------|-----------|
@@ -45,11 +37,7 @@ Debe poder leerse **antes** del post-mortem final y puede repartirse en varios `
 | [`docs/arquitectura/componentes.md`](docs/arquitectura/componentes.md) | Inventario de **componentes** y combinaciones típicas. |
 | [`docs/arquitectura/sistemas.md`](docs/arquitectura/sistemas.md) | Orden de **sistemas** en el game loop y dependencias. |
 | [`docs/arquitectura/recursos-y-config.md`](docs/arquitectura/recursos-y-config.md) | JSON en `assets/cfg/`, Locator, resolución **320 × 256**. |
-| [`docs/arquitectura/flujo-de-juego.md`](docs/arquitectura/flujo-de-juego.md) | Loop, pausa, ausencia de escenas múltiples (hasta extender). |
-
-### Revisiones opcionales (formativas)
-
-Las **primeras tres entregas formativas** (no puntúan) suelen incluir también: nombre/descripción del grupo, propuesta técnica inicial, alcance hasta el final, etc. Cuando aplique lo anterior, estos mismos `.md` en **`docs/`** sirven como **documento único actualizable**. Detalle de entregas: [`docs/enunciado.md`](docs/enunciado.md) (secciones *Entregas formativas* y *Entrega sumativa*).
+| [`docs/arquitectura/flujo-de-juego.md`](docs/arquitectura/flujo-de-juego.md) | Bucle principal, pausa y flujo entre estados del juego. |
 
 ## Rúbricas del proyecto final
 

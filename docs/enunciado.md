@@ -1,8 +1,6 @@
-# Enunciato del proyecto — MISW-4407
+# Enunciato del proyecto
 
-*Introducción al desarrollo de videojuegos — proyecto final (clon *Defender*).*
-
-Este documento reúne el **enunciato** consolidado utilizado por el equipo: objetivos pedagógicos, producto esperado, requisitos, recursos cohorte y entregas. La **evaluación pormenorizada** (tablas por criterio) sigue documentada en el [**README** del repositorio](../README.md#rúbricas-del-proyecto-final) *(sección Rúbricas)*.
+*Introducción al desarrollo de videojuegos — proyecto final,* clon tipo *Defender*.
 
 ---
 
@@ -26,7 +24,7 @@ Aplicar en un solo producto lo aprendido en las cuatro primeras semanas del curs
 | Despliegue | **Despliegue** específico en **Python** (escritorio y web cuando aplique). |
 | Escenas | Patrón de **Escena(s)** en un proyecto real. |
 
-**Bonus opcionales** (contenidos de semanas posteriores si se implementan): diferencias entre **motores** y **APIs/Frameworks**, clasificación de **herramientas**, y/o **IA con steering behaviours** y **emergencia**.
+**Bonus opcionales** (temas de semanas posteriores si se implementan): diferencias entre **motores** y **APIs/Frameworks**, clasificación de **herramientas**, y/o **IA con steering behaviours** y **emergencia**.
 
 ## Producto: clon tipo *Defender* (Williams, 1981)
 
@@ -53,7 +51,7 @@ Réplica cercana al arcade con **énfasis en exactitud** (dimensiones, sonidos, 
 - **Wraparound** horizontal mundo y entidades; enemigos **wrap vertical**; **jugador no**.
 - Enemigos disparan en movimiento; a veces **misil pequeño**.
 - **Colisiones:** balas enemigas↔jugador; láser jugador↔enemigos, astronautas y otras balas enemigas.
-- **Pausa** — tecla dedicada; texto **PAUSED** parpadeante centrado *(alinear texto del enunciato con lo que marque la rúbrica vigente)*.
+- **Pausa** — tecla dedicada; texto **PAUSED** parpadeante centrado.
 - **Fanfare** al empezar a jugar la primera vez.
 - **Explosiones** tipo partícula con colores por tipo (jugador: blanco que funde a color).
 - **HUD** superior: **puntaje** y **vidas** (extras suelen enlazarse con bonificación).
@@ -62,33 +60,29 @@ Réplica cercana al arcade con **énfasis en exactitud** (dimensiones, sonidos, 
 - **Sonidos** y **animaciones** donde el original las use.
 - **Distribución** preferible **[itch.io](https://itch.io)** web o Windows; ejecutables macOS **no recomendados** para entrega habitual.
 
-## Bonificación *(opcional, según rúbrica)*
+## Bonificación *(opcional)*
 
 Entre otros: cámara según disparo; vidas + recuperación por puntos (**config**); **smart bomb** (+recarga por puntaje); HIGH-SCORE persistente en config (**ej. 21 270** inicial); tabla de nombres; **texto multicolor dinámico** (no sprites); **≥ 5 oleadas** en configuración **o** modo infinito con dificultad creciente; **minimapa**; todos los enemigos; **fase 2** sin astronautas; **modo atracción**; vistas **debug**; **editor de niveles**; efectos extra; **dos jugadores**; **gamepad**.
 
-Los **detalles de calificación por ítem** se documentaron en [**Rúbricas**](../README.md#rúbricas-del-proyecto-final).
-
-## Recursos oficiales (cohorte MISW-4407)
+## Recursos oficiales
 
 - **[Sitio cohorte — recursos proyecto](https://misw-4407-desarrollo-de-videojuegos.github.io/web-cohorte-2026-12/)** — sprites, algo de audio, **`window.json`** referencia (**320 × 256**); respetar **rejilla tamaño** al editar.
 - Completar sonidos (**[sfxr](https://sfxr.me/)**); exportación **`.ogg`** para web (**Audacity** u otra herramienta).
 
 > **Assets propios:** permitidos cumpliendo **copyright** de terceros y la **resolución de diseño** (p. ej. 320 × 256).
 
-## Entregas formativas *(no califican — mentoría)*
+## Entregas formativas
 
 1. Nombre/descripción del grupo + integrantes/correos + GitHub + documentación disponible.  
 2. **Propuesta técnica.**  
 3. **Avances:** ECS propuesto, refactor acumulado, bitácora por persona, alcance hacia la entrega final, **repositorio** actual.
 
-Las **tres primeras entregas** no puntúan; habilitan revisión opcional por docentes/tutores.
-
-## Entrega sumativa *(impacta la nota)*
+## Entrega sumativa
 
 | Entregable | Contenido breve esperado |
 |------------|-------------------------|
 | **Build público** (itch.io / Game Jolt / Newgrounds…) | Ejecutable; descripción en la página del portal + pantallazo (+ bonifs. si aplican). |
-| **Código fuente** | URL Git; tag/commit final alineado con lo publicado; historial por semanas visible. |
+| **Código fuente** | URL Git con historial accesible. |
 | **Post-mortem + arquitectura grupal** | Evolución semanal; ECS y decisiones *(diagramas opcionales)*; patrones; reflexión. |
 | **Post-mortem individual** | Rol propio + aprendizajes. |
 | **Vídeo** | Juego, equipo, ECS (componentes/sistemas/config), paradigma extra, papel de cada integrante *(trailer opcional)*. |
@@ -100,10 +94,6 @@ Las **tres primeras entregas** no puntúan; habilitan revisión opcional por doc
 - **Debug / trucos** documentados (README itch o proyecto).
 - Comunicación temprana con tutores/monitores/profesores ante bloqueos.
 
-## Ponderación *(proyecto final ~50 % curso típico)*
+## Ponderación
 
-Como orientación habitual del curso: **juego publicado 20 %**, código 10 %, post-mortem grupal 10 %, individual 10 %, vídeo presentación 10 % — más **≈10 %** posible bonificación global. Confirmar valores en el **silabus** / docencia vigente.
-
----
-
-*Última edición contenido — alinear con comunicados oficiales curso año/cohorte en curso.*
+**Juego publicado 20 %**, código 10 %, post-mortem grupal 10 %, individual 10 %, vídeo presentación 10 %, más **≈10 %** de bonificación global posible.
