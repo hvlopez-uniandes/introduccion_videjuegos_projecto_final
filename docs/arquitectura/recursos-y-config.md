@@ -10,7 +10,7 @@ El motor recibe un directorio de JSON en **`GameEngine(cfg_dir=…)`**. En **`ma
 python main.py assets/cfg
 ```
 
-Si no pasas ruta, por defecto intenta **`src/cfg/`** *(crear o usar siempre `assets/cfg` como en el curso).* Lo relevante es que **todos los `.json` esperados vivan en la misma carpeta** que uses al ejecutar.
+Si no pasás ruta, el motor usa por defecto **`assets/cfg/`**. **Todos los `.json`** que lee `config.py` deben estar en esa misma carpeta (`cfg_dir`).
 
 ---
 
@@ -20,7 +20,7 @@ Si no pasas ruta, por defecto intenta **`src/cfg/`** *(crear o usar siempre `ass
 |---------|---------------------|----------------|
 | [**`window.json`**](../../assets/cfg/window.json) | `title`, `size.w/h`, `bg_color`, `framerate` | **`load_window_config`** → `pygame.display.set_mode`, título, color de fondo, `Clock` |
 | [**`interface.json`**](../../assets/cfg/interface.json) | Colores de texto (p. ej. `title_text_color`, `high_score_color`, …) | **`load_interface_config`** **fusiona** con valores por defecto internos (fuente pixel, textos de título, instrucciones, pausa, HUD del escudo). Las claves que no coincidan con el esquema esperado **no sustituyen** bloques `title` / `pause` salvo que el JSON traiga esos mismos nombres de bloque. |
-| [**`world.json`**](../../assets/cfg/world.json) | Parámetros de **estrellas** y **terreno del planeta** (colores, parallax, cantidad de puntos, etc.) | **Aún no** referenciado en `src/` *(reservado para fondo tipo Defender / semanas siguientes)*. |
+| [**`world.json`**](../../assets/cfg/world.json) | **Estrellas**, **relleno bajo línea-planeta procedural** (órbita períodica por partida cuando `scenario_seed` es `null`), parallax horizontal vía **`ambient_horizontal_scroll_px_s`** × factores estrella/planeta, `play_area_*` opcional (límites verticales de la nave). | **`load_world_bundle`** → **`create_scenario_entities`** (`scenario_factory`): entidades ECS con `system_scenario_update` / `system_scenario_draw`. Altura borde-planeta observable: **`planet_edge_screen_y`** en `scenario_profile.py`. |
 
 ---
 
@@ -31,7 +31,7 @@ Estos nombres los lee el código; si **faltan**, varias funciones tienen **valor
 | Archivo | Función | Si falta |
 |---------|---------|-----------|
 | **`enemies.json`** | `build_enemy_type_defs` | Retorna `{}` (sin definiciones de enemigos). |
-| **`level_01.json`** | `build_enemy_spawner_component` | **Hace falta para arrancar** el spawner tal como está escrito hoy (`_read_json` directo). El equipo debe versionar este archivo (u homogeneizar el código con un fallback). |
+| **`level_01.json`** | `build_enemy_spawner_component` | Si falta el archivo → spawner sin eventos, spawn jugador centrado alto (`160`, `100`). |
 | **`bullet.json`** | `build_bullet_def` | Default: velocidad 200, sprite `assets/img/bullet.png`, sonido `assets/snd/laser.ogg`. |
 | **`player.json`** | `build_player_config` | Default: sprite jugador, clip animación básico, sonidos movimiento/colisión. |
 | **`explosion.json`** | `build_explosion_config` | Default: `assets/img/explosion.png` + sonido `assets/snd/explosion.ogg`. |

@@ -46,5 +46,8 @@ class FontService:
         key = (rel, size_px)
         if key not in self._cache:
             path = Path(rel) if Path(rel).is_absolute() else self._root / rel
-            self._cache[key] = pygame.font.Font(str(path), size_px)
+            if path.is_file():
+                self._cache[key] = pygame.font.Font(str(path), size_px)
+            else:
+                self._cache[key] = pygame.font.SysFont("courier", size_px)
         return self._cache[key]

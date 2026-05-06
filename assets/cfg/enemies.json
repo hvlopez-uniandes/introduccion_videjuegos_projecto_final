@@ -1,0 +1,97 @@
+{
+  "lander_green": {
+    "type": "lander",
+    "image": "assets/img/enemy_lander.png",
+    "animations": {
+      "number_frames": 5,
+      "list": [{ "name": "IDLE", "start": 0, "end": 4, "framerate": 11 }]
+    },
+    "velocity_chase": 98,
+    "velocity_return": 72,
+    "distance_start_chase": 200,
+    "distance_start_return": 290,
+    "shoot_interval_sec": 0.82,
+    "bullet": {
+      "velocity": 175,
+      "image": "assets/img/enemy_bullet.png",
+      "number_frames": 1,
+      "size": { "x": 4, "y": 4 },
+      "color": { "r": 255, "g": 120, "b": 80 }
+    },
+    "sound": "",
+    "sound_chase": "",
+    "shoot_sound": "assets/snd/player_shoot.ogg"
+  },
+  "mutant_arcade": {
+    "type": "mutant",
+    "image": "assets/img/enemy_mutant.png",
+    "animations": {
+      "number_frames": 5,
+      "list": [{ "name": "IDLE", "start": 0, "end": 4, "framerate": 12 }]
+    },
+    "velocity_chase": 118,
+    "velocity_return": 78,
+    "distance_start_chase": 320,
+    "distance_start_return": 520,
+    "sound": "",
+    "sound_chase": ""
+  },
+  "swarmer_dot": {
+    "image": "assets/img/enemy_swarmer.png",
+    "animations": {
+      "number_frames": 1,
+      "list": [{ "name": "IDLE", "start": 0, "end": 0, "framerate": 8 }]
+    },
+    "velocity_chase": 168,
+    "velocity_return": 90,
+    "distance_start_chase": 280,
+    "distance_start_return": 480,
+    "chase_variant": "swarmer",
+    "sound": "",
+    "sound_chase": ""
+  },
+  "baiter_ufo": {
+    "image": "assets/img/enemy_mutant.png",
+    "animations": {
+      "number_frames": 5,
+      "list": [{ "name": "IDLE", "start": 0, "end": 4, "framerate": 16 }]
+    },
+    "velocity_chase": 210,
+    "velocity_return": 120,
+    "distance_start_chase": 520,
+    "distance_start_return": 640,
+    "chase_variant": "baiter",
+    "sound": "",
+    "sound_chase": ""
+  },
+  "pod_capsule": {
+    "type": "pod",
+    "image": "assets/img/enemy_pod.png",
+    "animations": {
+      "number_frames": 3,
+      "list": [{ "name": "IDLE", "start": 0, "end": 2, "framerate": 10 }]
+    },
+    "velocity_chase": 42,
+    "velocity_return": 30,
+    "distance_start_chase": 180,
+    "distance_start_return": 260,
+    "swarm_count": 5,
+    "swarm_enemy": "swarmer_dot",
+    "sound": "",
+    "sound_chase": ""
+  },
+  "bomber_row": {
+    "type": "bomber",
+    "image": "assets/img/enemy_lander.png",
+    "animations": {
+      "number_frames": 5,
+      "list": [{ "name": "IDLE", "start": 0, "end": 4, "framerate": 10 }]
+    },
+    "velocity_x": -46,
+    "velocity_y": 0,
+    "bomb_interval_sec": 2.4,
+    "bomb_fall_speed": 78,
+    "bomb_image": "assets/img/bomber_bomb.png",
+    "sound": ""
+  }
+}

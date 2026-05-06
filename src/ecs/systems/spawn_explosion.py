@@ -21,7 +21,10 @@ def spawn_explosion(center_x, center_y, play_spawn_sound=True):
     if cfg is None:
         return
 
-    surf = ServiceLocator.current().get("textures").load(cfg.image_path)
+    try:
+        surf = ServiceLocator.current().get("textures").load(cfg.image_path)
+    except Exception:
+        return
     cs = CSurface(surf, cfg.number_frames)
     ex = center_x - cs.area_w / 2.0
     ey = center_y - cs.area_h / 2.0

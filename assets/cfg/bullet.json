@@ -1,0 +1,8 @@
+{
+  "velocity": 280,
+  "image": "assets/img/enemy_bullet.png",
+  "number_frames": 1,
+  "size": { "x": 5, "y": 3 },
+  "color": { "r": 168, "g": 255, "b": 200 },
+  "sound": "assets/snd/player_shoot.ogg"
+}

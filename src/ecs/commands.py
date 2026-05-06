@@ -9,6 +9,8 @@ class CommandContext:
         self.dir_y = 0
         self.fire_mx = None
         self.fire_my = None
+        self.thrust_active = False
+        self.reverse_triggered = False
 
 
 class Command:
@@ -34,6 +36,18 @@ class PlayerUpCommand(Command):
 class PlayerDownCommand(Command):
     def execute(self, ctx):
         ctx.dir_y += 1
+
+
+class PlayerThrustHoldCommand(Command):
+    """Empuje horizontal (mantener); en arcade Defender acelera en la dirección `facing`."""
+
+    def execute(self, ctx):
+        ctx.thrust_active = True
+
+
+class PlayerReverseCommand(Command):
+    def execute(self, ctx):
+        ctx.reverse_triggered = True
 
 
 class PlayerFireCommand(Command):

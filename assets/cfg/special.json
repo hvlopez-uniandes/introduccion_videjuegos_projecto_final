@@ -1,0 +1,8 @@
+{
+  "shield_pulse": {
+    "duration_sec": 2.0,
+    "cooldown_sec": 5.0,
+    "radius_px": 130,
+    "activation_key": "SPACE"
+  }
+}

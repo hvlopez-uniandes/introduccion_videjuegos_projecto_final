@@ -21,16 +21,19 @@ def system_shield_hud_refresh() -> None:
     st, surf = hud
 
     text = "Pulso: --"
-    for _, (shield, _tp) in esper.get_components(CShieldSpecial, CTagPlayer):
-        if shield.active_remaining > 0.0:
-            text = f"Pulso activo {shield.active_remaining:.1f}s"
-        elif shield.cooldown_remaining > 0.0:
-            total = max(shield.cooldown_sec, 1e-6)
-            pct = int(100.0 * (1.0 - shield.cooldown_remaining / total))
-            text = f"Recarga {shield.cooldown_remaining:.1f}s  [{pct}%]"
-        else:
-            text = "Pulso LISTO [ESP]"
-        break
+    if game_state.arcade_defender_flight:
+        text = f"Bombas inteligentes ×{game_state.smart_bombs}  [ESP]  HIPER[H]  EMPUJE[X]  INV[C]"
+    else:
+        for _, (shield, _tp) in esper.get_components(CShieldSpecial, CTagPlayer):
+            if shield.active_remaining > 0.0:
+                text = f"Pulso activo {shield.active_remaining:.1f}s"
+            elif shield.cooldown_remaining > 0.0:
+                total = max(shield.cooldown_sec, 1e-6)
+                pct = int(100.0 * (1.0 - shield.cooldown_remaining / total))
+                text = f"Recarga {shield.cooldown_remaining:.1f}s  [{pct}%]"
+            else:
+                text = "Pulso LISTO [ESP]"
+            break
 
     font = ServiceLocator.current().get("fonts").get(st.font_path, st.size_px)
     surf.update_from_text(font, text, (st.r, st.g, st.b), st.antialias)

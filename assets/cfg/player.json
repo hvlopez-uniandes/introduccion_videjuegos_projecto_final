@@ -1,0 +1,21 @@
+{
+  "arcade_defender_flight": true,
+  "burner_idle_image": "assets/img/player_burner_idle.png",
+  "burner_moving_image": "assets/img/player_burner_moving.png",
+  "burner_idle_frames": 3,
+  "burner_moving_frames": 3,
+  "burner_anim_hz": 14,
+  "burner_tuck_px": 3,
+  "image": "assets/img/player.png",
+  "animations": {
+    "number_frames": 1,
+    "list": [
+      { "name": "IDLE", "start": 0, "end": 0, "framerate": 4 },
+      { "name": "MOVE", "start": 0, "end": 0, "framerate": 4 }
+    ]
+  },
+  "input_velocity": 150,
+  "motion_smoothing_hz": 17,
+  "sound": "",
+  "sound_collision": "assets/snd/player_die.ogg"
+}

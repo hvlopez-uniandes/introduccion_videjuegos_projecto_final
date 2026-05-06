@@ -1,0 +1,8 @@
+{
+  "image": "assets/img/bomber_bomb.png",
+  "animations": {
+    "number_frames": 5,
+    "list": [{ "name": "EXPLODE", "start": 0, "end": 4, "framerate": 22 }]
+  },
+  "sound": "assets/snd/enemy_die.ogg"
+}

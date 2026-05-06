@@ -1,8 +1,9 @@
 {
-    "title": "MISO - Planet savior!",
+    "title": "DEFENDER — MISW · Planet savior",
+    "fullscreen": false,
     "size": {
-        "w": 320,
-        "h": 256
+        "w": 960,
+        "h": 768
     },
     "bg_color": {
         "r": 25,

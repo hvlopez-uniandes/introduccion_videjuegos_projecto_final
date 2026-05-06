@@ -1,4 +1,9 @@
 {
+    "ambient_horizontal_scroll_px_s": 14,
+    "planet_baseline_offset_from_bottom_px": 52,
+    "scenario_seed": null,
+    "play_area_top_px": 4,
+    "play_area_bottom_px": 218,
     "star_colors": [
         {
             "r": 213,

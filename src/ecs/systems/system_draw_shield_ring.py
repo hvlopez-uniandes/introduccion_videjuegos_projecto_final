@@ -3,6 +3,7 @@ import math
 import esper
 import pygame
 
+from src.engine.viewport import world_to_screen_x_positions
 from src.ecs.components.c_position import CPosition
 from src.ecs.components.c_shield_special import CShieldSpecial
 from src.ecs.components.c_size import CSize
@@ -17,10 +18,10 @@ def system_draw_shield_ring(surface: pygame.Surface) -> None:
         surf = esper.try_component(pe, CSurface)
         sz = esper.try_component(pe, CSize)
         if surf is not None:
-            cx = int(pos.x + surf.area_w / 2.0)
+            ew = float(surf.area_w)
             cy = int(pos.y + surf.area_h / 2.0)
         elif sz is not None:
-            cx = int(pos.x + sz.w / 2.0)
+            ew = float(sz.w)
             cy = int(pos.y + sz.h / 2.0)
         else:
             continue
@@ -29,5 +30,7 @@ def system_draw_shield_ring(surface: pygame.Surface) -> None:
         pulse = 0.55 + 0.45 * (0.5 + 0.5 * math.sin(pygame.time.get_ticks() * 0.02))
         col = (80, 220, 255, int(90 * pulse * t + 40))
         ring = pygame.Surface((surface.get_width(), surface.get_height()), pygame.SRCALPHA)
-        pygame.draw.circle(ring, col, (cx, cy), r, width=4)
+        for sx in world_to_screen_x_positions(float(pos.x), ew):
+            cx = int(sx + ew * 0.5)
+            pygame.draw.circle(ring, col, (cx, cy), r, width=4)
         surface.blit(ring, (0, 0))

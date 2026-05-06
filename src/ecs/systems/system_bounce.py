@@ -1,17 +1,23 @@
 import esper
 
+import src.engine.game_state as game_state
+
 from src.ecs.components.c_position import CPosition
 from src.ecs.components.c_surface import CSurface
-from src.ecs.components.c_tags import CTagEnemy, CTagHunter
+from src.ecs.components.c_tags import CTagEnemy, CTagHunter, CTagAsteroid, CTagLander
 from src.ecs.components.c_velocity import CVelocity
 
 
 def system_bounce(screen_w, screen_h):
-    sw = float(screen_w)
+    sw = float(game_state.world_wrap_w if game_state.world_wrap_w else screen_w)
     sh = float(screen_h)
 
     for ent, (pos, vel, surf, _te) in esper.get_components(CPosition, CVelocity, CSurface, CTagEnemy):
         if esper.try_component(ent, CTagHunter) is not None:
+            continue
+        if esper.try_component(ent, CTagLander) is not None:
+            continue
+        if esper.try_component(ent, CTagAsteroid) is None:
             continue
         aw = surf.area_w
         ah = surf.area_h

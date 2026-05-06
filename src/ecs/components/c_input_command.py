@@ -4,3 +4,5 @@ class CInputCommand:
     def __init__(self):
         self.command_queue = []
         self.prev_mouse_down = False
+        self.prev_kb_fire_down = False
+        self.prev_reverse_down = False
