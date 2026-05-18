@@ -9,6 +9,7 @@ planet_explosion_flash_remaining = 0.0
 smart_bomb_flash_remaining = 0.0
 player_occluded_by_terrain = False
 tick_dt = 0.016
+homing_missiles = 3
 
 score = 0
 lives = 3
@@ -212,6 +213,7 @@ def reset_session_for_new_level(lives_override: int = None):
     paused = False
     session_time_accum = 0.0
     _arcade_reset_economy()
+    reset_homing_missiles()
 
 
 def begin_play_after_menu():
@@ -250,7 +252,7 @@ def add_score(delta: int) -> None:
         next_score_milestone += step
         add_extra_life(1)
         add_smart_bombs(1)
-
+        reset_homing_missiles()
 
 def lose_life() -> bool:
     """Devuelve True si aún quedan vidas."""
@@ -304,6 +306,17 @@ def mark_victory():
     record_high_score_if_best(score)
     level_victorious = True
     game_phase = "victory"
+
+def consume_homing_missile_stock() -> bool:
+    global homing_missiles
+    if homing_missiles <= 0:
+        return False
+    homing_missiles -= 1
+    return True
+
+def reset_homing_missiles() -> None:
+    global homing_missiles
+    homing_missiles = int(get_rule("initial_homing_missiles", 10))
 
 
 def consume_fanfare_flag() -> bool:

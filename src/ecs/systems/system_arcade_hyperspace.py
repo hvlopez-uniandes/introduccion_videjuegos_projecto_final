@@ -14,6 +14,7 @@ from src.ecs.components.c_velocity import CVelocity
 from src.ecs.systems.spawn_explosion import spawn_explosion
 from src.engine.audio_util import play_sound
 from src.engine.frame_input import consume_hyperspace
+from src.ecs.systems.system_hyperspace_effect import _spawn_hyperspace_particles
 
 
 def _player_dims(ent: int):
@@ -58,12 +59,14 @@ def system_arcade_hyperspace():
     if random.random() < chance:
         spawn_explosion(cx, cy)
         play_sound("assets/snd/explosion.ogg", 0.42)
+        _spawn_hyperspace_particles(pos.x, pos.y, w, h)
         if game_state.lose_life():
             game_state.respawn_player_entity(ent)
         vel.vx = 0.0
         vel.vy = 0.0
         return
 
+    _spawn_hyperspace_particles(pos.x, pos.y, w, h)
     pos.x = random.uniform(4.0, max_x)
     pos.y = random.uniform(min_y, max_y)
     vel.vx *= 0.35

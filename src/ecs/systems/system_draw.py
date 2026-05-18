@@ -3,6 +3,8 @@ from __future__ import annotations
 import esper
 import pygame
 
+from src.ecs.components.c_particle import CParticle
+from src.ecs.components.c_rotation import CRotation
 import src.engine.game_state as game_state
 
 from src.engine.viewport import world_to_screen_x_positions
@@ -28,14 +30,8 @@ def _sprite_draw_scale(world: bool = True):
 
 
 def _blit_sprite_frame(
-    surface,
-    pos_x,
-    py,
-    surf,
-    frame_idx: int,
-    flip_h: bool = False,
-    alpha: int | None = None,
-    world_scale: bool = True,
+    surface, pos_x, py, surf, frame_idx,
+    flip_h=False, alpha=None, world_scale=True, angle=0.0
 ):
     fi = max(0, min(int(frame_idx), surf.num_frames - 1))
     x = fi * surf.frame_w
@@ -53,25 +49,19 @@ def _blit_sprite_frame(
         piece = pygame.transform.smoothscale(piece, (nw, nh))
         pos_x -= (nw - float(surf.frame_w)) * 0.5
         py -= (nh - float(surf.frame_h)) * 0.5
+    if abs(angle) > 0.1:
+        piece = pygame.transform.rotate(piece, -angle)
+        pos_x -= (piece.get_width() - surf.frame_w * sc) * 0.5
+        py -= (piece.get_height() - surf.frame_h * sc) * 0.5
     surface.blit(piece, (int(pos_x), int(py)))
 
-
-def _blit_sprite(
-    surface,
-    pos_x,
-    py,
-    surf,
-    anim,
-    flip_h: bool = False,
-    alpha: int | None = None,
-    world_scale: bool = True,
-):
+def _blit_sprite(surface, pos_x, py, surf, anim, flip_h=False, alpha=None, world_scale=True, angle=0.0):
     if anim is not None:
         fi = int(anim.current_frame)
         fi = max(0, min(fi, surf.num_frames - 1))
     else:
         fi = 0
-    _blit_sprite_frame(surface, pos_x, py, surf, fi, flip_h=flip_h, alpha=alpha, world_scale=world_scale)
+    _blit_sprite_frame(surface, pos_x, py, surf, fi, flip_h=flip_h, alpha=alpha, world_scale=world_scale, angle=angle)
 
 
 def _draw_arcade_burners_behind_ship(surface):
@@ -121,6 +111,8 @@ def system_draw(surface):
         if esper.try_component(ent, CTagExplosion) is not None:
             continue
         anim = esper.try_component(ent, CAnimation)
+        rot = esper.try_component(ent, CRotation)
+        angle = rot.angle if rot is not None else 0.0
         flip = False
         if esper.try_component(ent, CTagPlayer) is not None:
             arc = esper.try_component(ent, CArcadeDefenderFlight)
@@ -131,7 +123,7 @@ def system_draw(surface):
         if esper.try_component(ent, CTagPlayer) is not None and game_state.player_occluded_by_terrain:
             alpha = int(game_state.get_rule("terrain_occlusion_alpha", 200))
         for sx in world_to_screen_x_positions(float(pos.x), ew):
-            _blit_sprite(surface, sx, pos.y, surf, anim, flip_h=flip, alpha=alpha, world_scale=True)
+            _blit_sprite(surface, sx, pos.y, surf, anim, flip_h=flip, alpha=alpha, world_scale=True, angle=angle)
 
     for ent, (pos, surf) in esper.get_components(CPosition, CSurface):
         if esper.try_component(ent, CTagExplosion) is None:
@@ -155,6 +147,14 @@ def system_draw(surface):
             oy = int(round((bh - float(size.h)) * 0.5))
             r = pygame.Rect(int(sx) - ox, int(pos.y) - oy, bw, bh)
             pygame.draw.rect(surface, (color.r, color.g, color.b), r)
+
+    for ent, (pos, part) in esper.get_components(CPosition, CParticle):
+        alpha = max(0, int(255 * (1.0 - part.elapsed / part.lifetime)))
+        sc = _sprite_draw_scale(world=True)
+        sz = max(1, int(part.size * sc))
+        s = pygame.Surface((sz, sz), pygame.SRCALPHA)
+        s.fill((part.r, part.g, part.b, alpha))
+        surface.blit(s, (int(pos.x), int(pos.y)))
 
     for ent, (pos, surf) in esper.get_components(CPosition, CSurface):
         if esper.try_component(ent, CTagHud) is None and esper.try_component(ent, CTagHudDynamic) is None:

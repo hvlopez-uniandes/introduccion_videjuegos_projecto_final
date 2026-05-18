@@ -54,5 +54,8 @@
   "terrain_occlusion_alpha": 200,
   "terrain_occlusion_lip_px": 6,
   "sprite_draw_scale": 2.0,
-  "radar_blip_scale": 2.0
+  "radar_blip_scale": 2.0,
+  "initial_homing_missiles": 6,
+  "homing_missile_speed": 250,
+  "homing_missile_blast_radius": 100
 }

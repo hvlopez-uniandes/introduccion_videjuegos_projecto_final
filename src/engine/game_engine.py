@@ -96,7 +96,10 @@ from src.ecs.systems.system_scenario_draw import system_scenario_draw
 from src.ecs.systems.system_scenario_update import system_scenario_update
 from src.ecs.systems.system_world_wrap import system_world_wrap
 from src.engine.scenario_factory import create_scenario_entities
-
+from src.engine.frame_input import request_hyperspace, request_shield_pulse, request_smart_bomb, request_missile
+from src.ecs.systems.system_missile_homing import system_missile_homing
+from src.ecs.systems.system_missile_homing import system_missile_homing, system_missile_launch
+from src.ecs.systems.system_hyperspace_effect import system_hyperspace_effect
 
 def _clamp_byte(n):
     n = int(n)
@@ -334,6 +337,8 @@ class GameEngine:
                                 request_smart_bomb()
                             else:
                                 request_shield_pulse()
+                        elif ek == pygame.K_f:
+                            request_missile()
 
             ph = game_state.game_phase if self.is_running else "menu"
 
@@ -627,6 +632,9 @@ class GameEngine:
         system_player_animation()
         system_hunter_animation()
         system_shield_pulse(self.delta_time)
+        system_missile_launch()
+        system_missile_homing(self.delta_time)
+        system_missile_homing(self.delta_time)
         system_collision_bullet_enemy_bullet()
         system_collision_bullet_enemy()
         system_collision_bullet_astronaut()
@@ -636,6 +644,7 @@ class GameEngine:
         system_explosion_cleanup()
         system_player_move_sound()
         system_shield_hud_refresh()
+        system_hyperspace_effect(self.delta_time)
         self._layout_play_hints_corner()
         if game_state.planet_explosion_flash_remaining > 0.0:
             game_state.planet_explosion_flash_remaining = max(
@@ -809,6 +818,7 @@ class GameEngine:
         row2_bits = []
         if game_state.arcade_defender_flight:
             row2_bits.append(f"BOMBAS ×{game_state.smart_bombs}")
+            row2_bits.append(f"MISILES ×{game_state.homing_missiles}")
         row2_bits.append(f"VIDAS ×{game_state.lives}")
         row2_bits.append(f"ENEM {n_enemies:02d}")
         row2_bits.append(f"MUT {mutants:02d}")

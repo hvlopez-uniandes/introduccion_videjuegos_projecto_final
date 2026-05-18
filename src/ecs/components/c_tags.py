@@ -68,3 +68,6 @@ class CTagHud:
 
 class CTagHudDynamic:
     """Texto de interfaz que se regenera por frame (p. ej. cooldown)."""
+
+class CTagMissileHoming:
+    """Misil de rastreo con daño en área."""

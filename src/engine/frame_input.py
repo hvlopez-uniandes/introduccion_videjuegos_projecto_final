@@ -39,3 +39,15 @@ def consume_hyperspace() -> bool:
     t = hyperspace_requested
     hyperspace_requested = False
     return t
+
+missile_requested = False
+
+def request_missile() -> None:
+    global missile_requested
+    missile_requested = True
+
+def consume_missile() -> bool:
+    global missile_requested
+    t = missile_requested
+    missile_requested = False
+    return t
