@@ -47,43 +47,23 @@ def _tick_brain(pos, vel, ai, ppos):
     return prev_state, False
 
 
+def _process_ai_group(tag_class, ppos, volume):
+    for _ent, (pos, vel, ai, _) in esper.get_components(CPosition, CVelocity, CHunterAI, tag_class):
+        prev, skipped = _tick_brain(pos, vel, ai, ppos)
+        if skipped:
+            continue
+        if prev == "idle" and ai.state == "chase" and ai.sound_chase_path:
+            play_sound(ai.sound_chase_path, volume)
+
+
 def system_hunter_ai():
     players = list(esper.get_components(CPosition, CTagPlayer))
     if not players:
         return
     _, (ppos, _tp) = players[0]
 
-    for _ent, (pos, vel, ai, _th) in esper.get_components(CPosition, CVelocity, CHunterAI, CTagHunter):
-        prev, skipped = _tick_brain(pos, vel, ai, ppos)
-        if skipped:
-            continue
-        if prev == "idle" and ai.state == "chase" and ai.sound_chase_path:
-            play_sound(ai.sound_chase_path, 0.75)
-
-    for _ent, (pos, vel, ai, _tm) in esper.get_components(CPosition, CVelocity, CHunterAI, CTagMutant):
-        prev, skipped = _tick_brain(pos, vel, ai, ppos)
-        if skipped:
-            continue
-        if prev == "idle" and ai.state == "chase" and ai.sound_chase_path:
-            play_sound(ai.sound_chase_path, 0.55)
-
-    for _ent, (pos, vel, ai, _) in esper.get_components(CPosition, CVelocity, CHunterAI, CTagSwarmer):
-        prev, skipped = _tick_brain(pos, vel, ai, ppos)
-        if skipped:
-            continue
-        if prev == "idle" and ai.state == "chase" and ai.sound_chase_path:
-            play_sound(ai.sound_chase_path, 0.68)
-
-    for _ent, (pos, vel, ai, _) in esper.get_components(CPosition, CVelocity, CHunterAI, CTagBaiter):
-        prev, skipped = _tick_brain(pos, vel, ai, ppos)
-        if skipped:
-            continue
-        if prev == "idle" and ai.state == "chase" and ai.sound_chase_path:
-            play_sound(ai.sound_chase_path, 0.82)
-
-    for _ent, (pos, vel, ai, _) in esper.get_components(CPosition, CVelocity, CHunterAI, CTagPod):
-        prev, skipped = _tick_brain(pos, vel, ai, ppos)
-        if skipped:
-            continue
-        if prev == "idle" and ai.state == "chase" and ai.sound_chase_path:
-            play_sound(ai.sound_chase_path, 0.34)
+    _process_ai_group(CTagHunter, ppos, 0.75)
+    _process_ai_group(CTagMutant, ppos, 0.55)
+    _process_ai_group(CTagSwarmer, ppos, 0.68)
+    _process_ai_group(CTagBaiter, ppos, 0.82)
+    _process_ai_group(CTagPod, ppos, 0.34)

@@ -11,32 +11,12 @@ from src.ecs.components.c_position import CPosition
 from src.ecs.components.c_size import CSize
 from src.ecs.components.c_tags import CTagEnemy, CTagEnemyBullet, CTagEnemyMissile, CTagMutant, CTagPlayer
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.systems.collision_util import get_entity_dims
 import src.engine.game_state as game_state
 from src.engine.viewport import aabb_in_viewport
 
 
-def _dims_player(ent):
-    from src.ecs.components.c_surface import CSurface
 
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 12.0, 8.0
-    return float(sz.w), float(sz.h)
-
-
-def _enemy_dims(ent):
-    from src.ecs.components.c_surface import CSurface
-
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 10.0, 10.0
-    return float(sz.w), float(sz.h)
 
 
 def system_mutant_missile(delta_time):
@@ -47,7 +27,7 @@ def system_mutant_missile(delta_time):
         return
     _, (ppos, _) = players[0]
     pe = players[0][0]
-    pw, ph = _dims_player(pe)
+    pw, ph = get_entity_dims(pe, fallback=(12.0, 8.0))
     vis = aabb_in_viewport(float(ppos.x), float(ppos.y), pw, ph, margin=8.0)
     if not vis:
         return
@@ -67,7 +47,7 @@ def system_mutant_missile(delta_time):
         if random.random() > p_try:
             continue
 
-        ew, eh = _enemy_dims(ent)
+        ew, eh = get_entity_dims(ent, fallback=(10.0, 10.0))
         ecx = pos.x + ew * 0.5
         ecy = pos.y + eh * 0.5
         pcx = ppos.x + pw * 0.5

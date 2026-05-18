@@ -5,9 +5,8 @@ import esper
 import src.engine.game_state as game_state
 
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_scenario import CTagScenarioBackground
+from src.ecs.systems.collision_util import get_entity_dims
 from src.ecs.components.c_tags import (
     CTagAstronaut,
     CTagBullet,
@@ -19,15 +18,6 @@ from src.ecs.components.c_tags import (
     CTagPlayer,
 )
 
-
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is not None:
-        return float(sz.w), float(sz.h)
-    return 0.0, 0.0
 
 
 def _wrap_horizontal(pos, w, ww):
@@ -60,7 +50,7 @@ def system_world_wrap(screen_w: int, screen_h: int) -> None:
         if esper.try_component(ent, CTagScenarioBackground):
             continue
 
-        aw, ah = _dims(ent)
+        aw, ah = get_entity_dims(ent)
         if aw <= 0:
             continue
 

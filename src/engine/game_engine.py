@@ -653,46 +653,69 @@ class GameEngine:
         system_scenario_draw(self.screen)
         system_draw(self.screen)
         system_draw_shield_ring(self.screen)
-        self._draw_planet_explosion_flash_overlay()
-        self._draw_smart_bomb_flash_overlay()
+        self._draw_flash_overlay(
+            "planet_explosion_flash_remaining",
+            "planet_explosion_flash_sec",
+            2.2,
+            0.2,
+            (218, 38, 52),
+            (25, 50, 30),
+            45,
+            205,
+            235,
+            pulse_factor=1.15,
+        )
+        self._draw_flash_overlay(
+            "smart_bomb_flash_remaining",
+            "smart_bomb_flash_sec",
+            0.42,
+            0.08,
+            (180, 240, 255),
+            (40, 15, 0),
+            40,
+            170,
+            220,
+            stripes=True,
+        )
         system_draw_radar_defender(self.screen)
         self._draw_play_hud()
 
-    def _draw_planet_explosion_flash_overlay(self):
-        t = float(getattr(game_state, "planet_explosion_flash_remaining", 0.0) or 0.0)
+    def _draw_flash_overlay(
+        self,
+        state_attr: str,
+        rule_key: str,
+        default_sec: float,
+        min_sec: float,
+        base_rgb: tuple[int, int, int],
+        pulse_add: tuple[int, int, int],
+        alpha_base: int,
+        alpha_add: int,
+        alpha_max: int,
+        pulse_factor: float = 1.0,
+        stripes: bool = False,
+    ) -> None:
+        t = float(getattr(game_state, state_attr, 0.0) or 0.0)
         if t <= 0.0:
             return
         w, h = self.screen.get_size()
-        max_t = float(game_state.get_rule("planet_explosion_flash_sec", 2.2))
-        max_t = max(0.2, max_t)
-        pulse = min(1.0, (t / max_t) * 1.15)
+        max_t = float(game_state.get_rule(rule_key, default_sec))
+        max_t = max(min_sec, max_t)
+        pulse = min(1.0, (t / max_t) * pulse_factor)
+        alpha = int(min(alpha_max, alpha_base + int(alpha_add * pulse)))
         ov = pygame.Surface((w, h), pygame.SRCALPHA)
-        alpha = int(min(235, 45 + int(205 * pulse)))
         ov.fill(
             (
-                min(255, int(218 + 25 * pulse)),
-                min(255, int(38 + 50 * pulse)),
-                min(255, int(52 + 30 * pulse)),
+                min(255, int(base_rgb[0] + pulse_add[0] * pulse)),
+                min(255, int(base_rgb[1] + pulse_add[1] * pulse)),
+                min(255, int(base_rgb[2] + pulse_add[2] * pulse)),
                 alpha,
             )
         )
-        self.screen.blit(ov, (0, 0))
-
-    def _draw_smart_bomb_flash_overlay(self):
-        t = float(getattr(game_state, "smart_bomb_flash_remaining", 0.0) or 0.0)
-        if t <= 0.0:
-            return
-        w, h = self.screen.get_size()
-        max_t = float(game_state.get_rule("smart_bomb_flash_sec", 0.42))
-        max_t = max(0.08, max_t)
-        pulse = min(1.0, t / max_t)
-        alpha = int(min(220, 40 + int(170 * pulse)))
-        ov = pygame.Surface((w, h), pygame.SRCALPHA)
-        ov.fill((min(255, 180 + int(40 * pulse)), min(255, 240 + int(15 * pulse)), 255, alpha))
-        band_h = max(2, h // 80)
-        stripe_a = min(90, int(50 + 40 * pulse))
-        for i in range(0, h, band_h * 3):
-            pygame.draw.rect(ov, (255, 255, 255, stripe_a), (0, i, w, band_h))
+        if stripes:
+            band_h = max(2, h // 80)
+            stripe_a = min(90, int(50 + 40 * pulse))
+            for i in range(0, h, band_h * 3):
+                pygame.draw.rect(ov, (255, 255, 255, stripe_a), (0, i, w, band_h))
         self.screen.blit(ov, (0, 0))
 
     def _draw_pause_overlay(self):

@@ -18,7 +18,6 @@ from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_tags import CTagBullet, CTagEnemyBullet, CTagPlayer
 from src.ecs.components.c_player_arcade_burner import CPlayerArcadeBurner
 from src.ecs.components.c_velocity import CVelocity
-import src.engine.paths as engine_paths
 from src.engine.audio_util import play_sound
 from src.engine.service_locator import ServiceLocator
 
@@ -105,8 +104,6 @@ def system_execute_commands():
         if bullet_def.sound_path:
             play_sound(bullet_def.sound_path, 0.55)
 
-    root = engine_paths.PROJECT_ROOT
-
     for _ent, (inp, vel, pos, speed, _tp) in esper.get_components(
         CInputCommand,
         CVelocity,
@@ -142,7 +139,7 @@ def system_execute_commands():
             vel.vx += (t_vx - vel.vx) * sm
             vel.vy += (t_vy - vel.vy) * sm
 
-        if ctx.fire_mx is None or n_bullets >= max_bullets or root is None:
+        if ctx.fire_mx is None or n_bullets >= max_bullets:
             continue
 
         if surf is not None:

@@ -3,26 +3,11 @@
 import esper
 
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_player_sfx import CPlayerSfx
 from src.ecs.components.c_tags import CTagEnemyBullet, CTagPlayer
+from src.ecs.systems.collision_util import get_entity_dims, aabb_overlap
 from src.engine.audio_util import play_sound
 import src.engine.game_state as game_state
-
-
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 0.0, 0.0
-    return float(sz.w), float(sz.h)
-
-
-def _aabb_overlap(ax, ay, aw, ah, bx, by, bw, bh):
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 
 
 def _play_collision_sfx():
@@ -39,12 +24,12 @@ def system_collision_enemy_bullet_player():
     if not players:
         return
     pe, (ppos, _tp) = players[0]
-    pw, ph = _dims(pe)
+    pw, ph = get_entity_dims(pe)
     rm = []
 
     for be, (bpos, _tb) in esper.get_components(CPosition, CTagEnemyBullet):
-        bw, bh = _dims(be)
-        if _aabb_overlap(
+        bw, bh = get_entity_dims(be)
+        if aabb_overlap(
             ppos.x, ppos.y, pw, ph,
             bpos.x, bpos.y, bw, bh,
         ):

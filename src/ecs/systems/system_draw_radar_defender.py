@@ -7,8 +7,6 @@ import esper
 import src.engine.game_state as game_state
 
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_tags import (
     CTagBaiter,
     CTagBomb,
@@ -21,16 +19,8 @@ from src.ecs.components.c_tags import (
     CTagPod,
     CTagSwarmer,
 )
+from src.ecs.systems.collision_util import get_entity_dims
 
-
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return s.area_w, s.area_h
-    sz = esper.try_component(ent, CSize)
-    if sz is not None:
-        return float(sz.w), float(sz.h)
-    return 8.0, 8.0
 
 
 def _enemy_color(ent: int):
@@ -75,7 +65,7 @@ def system_draw_radar_defender(surface: pygame.Surface) -> None:
 
     for ent, comps in esper.get_components(CPosition, CTagPlayer):
         pos = comps[0]
-        pw, _ph = _dims(ent)
+        pw, _ph = get_entity_dims(ent, fallback=(8.0, 8.0))
         px = ((pos.x + pw * 0.5) % ww) / ww * float(w - 4) + 2.0
         ix = int(px) - blip_w // 2 + 1
         py_r = y0 + 4 + max(0, (band_h - 8 - blip_h_pl) // 2)
@@ -84,7 +74,7 @@ def system_draw_radar_defender(surface: pygame.Surface) -> None:
 
     for ent, comps in esper.get_components(CPosition, CTagEnemy):
         pos = comps[0]
-        ew, _eh = _dims(ent)
+        ew, _eh = get_entity_dims(ent, fallback=(8.0, 8.0))
         ex = ((pos.x + ew * 0.5) % ww) / ww * float(w - 4) + 2.0
         col = _enemy_color(ent)
         ix = int(ex) - blip_w // 2 + 1

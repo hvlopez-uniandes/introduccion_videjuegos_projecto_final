@@ -1,4 +1,4 @@
 class CVelocity:
-    def __init__(self, vx=0.0, vy=0.0):
-        self.vx = vx
-        self.vy = vy
+    def __init__(self, vx: float = 0.0, vy: float = 0.0) -> None:
+        self.vx: float = vx
+        self.vy: float = vy
