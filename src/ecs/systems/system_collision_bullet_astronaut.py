@@ -4,25 +4,10 @@ import esper
 
 from src.ecs.components.c_astronaut_state import CAstronautState
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_tags import CTagAstronaut, CTagBullet, CTagEnemyBullet
+from src.ecs.systems.collision_util import get_entity_dims, aabb_overlap
 from src.ecs.systems.spawn_explosion import spawn_explosion
 import src.engine.game_state as game_state
-
-
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 0.0, 0.0
-    return float(sz.w), float(sz.h)
-
-
-def _overlap(ax, ay, aw, ah, bx, by, bw, bh):
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 
 
 def system_collision_bullet_astronaut():
@@ -31,12 +16,12 @@ def system_collision_bullet_astronaut():
     for be, (pos, _tb) in esper.get_components(CPosition, CTagBullet):
         if esper.try_component(be, CTagEnemyBullet):
             continue
-        bw, bh = _dims(be)
+        bw, bh = get_entity_dims(be)
         bullets.append((be, pos, bw, bh))
 
     astros = []
     for ae, (pos, st, _ta) in esper.get_components(CPosition, CAstronautState, CTagAstronaut):
-        aw, ah = _dims(ae)
+        aw, ah = get_entity_dims(ae)
         astros.append((ae, pos, st, aw, ah))
 
     rm = []
@@ -47,7 +32,7 @@ def system_collision_bullet_astronaut():
                 continue
             if st.mode == CAstronautState.LANDER_CARRY:
                 continue
-            if _overlap(bpos.x, bpos.y, bw, bh, apos.x, apos.y, aw, ah):
+            if aabb_overlap(bpos.x, bpos.y, bw, bh, apos.x, apos.y, aw, ah):
                 cx = apos.x + aw * 0.5
                 cy = apos.y + ah * 0.5
                 spawn_explosion(cx, cy, play_spawn_sound=False)

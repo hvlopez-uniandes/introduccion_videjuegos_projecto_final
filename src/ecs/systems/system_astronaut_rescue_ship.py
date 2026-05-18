@@ -5,26 +5,14 @@ import esper
 from src.ecs.components.c_astronaut_state import CAstronautState
 from src.ecs.components.c_astronaut import CAstronautFootprint
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_tags import CTagAstronaut, CTagPlayer
+from src.ecs.systems.collision_util import get_entity_dims, aabb_overlap
 from src.engine.scenario_profile import planet_edge_screen_y
 from src.engine.scenario_query import get_planet_profile
 import src.engine.game_state as game_state
 
 
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 8.0, 10.0
-    return float(sz.w), float(sz.h)
 
-
-def _overlap(ax, ay, aw, ah, bx, by, bw, bh):
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 
 
 def system_astronaut_rescue_pickup():
@@ -32,15 +20,15 @@ def system_astronaut_rescue_pickup():
     if not players:
         return
     pe, (ppos, _) = players[0]
-    pw, ph = _dims(pe)
+    pw, ph = get_entity_dims(pe, fallback=(8.0, 10.0))
 
     for ae, (apos, st, _foot, _ta) in esper.get_components(
         CPosition, CAstronautState, CAstronautFootprint, CTagAstronaut,
     ):
         if st.mode != CAstronautState.FALLING:
             continue
-        aw, ah = _dims(ae)
-        if _overlap(ppos.x, ppos.y, pw, ph, apos.x, apos.y, aw, ah):
+        aw, ah = get_entity_dims(ae, fallback=(8.0, 10.0))
+        if aabb_overlap(ppos.x, ppos.y, pw, ph, apos.x, apos.y, aw, ah):
             st.mode = CAstronautState.SHIP_CARRY
             st.carrier_ent = pe
 
@@ -55,7 +43,7 @@ def system_astronaut_rescue_deposit():
     ):
         if st.mode != CAstronautState.SHIP_CARRY:
             continue
-        aw, ah = _dims(ae)
+        aw, ah = get_entity_dims(ae, fallback=(8.0, 10.0))
         cx = apos.x + aw * 0.5
         sy = planet_edge_screen_y(pl, cx)
         feet = apos.y + ah

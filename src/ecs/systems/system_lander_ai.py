@@ -6,13 +6,13 @@ import random
 import esper
 
 from src.ecs.components.c_astronaut_state import CAstronautState
-from src.ecs.components.c_color import CColor
 from src.ecs.components.c_lander_ai import CLanderAI
 from src.ecs.components.c_position import CPosition
 from src.ecs.components.c_size import CSize
-from src.ecs.components.c_tags import CTagEnemyBullet, CTagAstronaut, CTagEnemy, CTagLander, CTagPlayer
+from src.ecs.components.c_tags import CTagAstronaut, CTagEnemy, CTagEnemyBullet, CTagLander, CTagPlayer
 from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.systems.collision_util import get_entity_dims, aabb_overlap
 import src.engine.game_state as game_state
 from src.engine.audio_util import play_sound
 from src.engine.viewport import aabb_in_viewport
@@ -30,36 +30,7 @@ def _shared_enemy_bullet_surface(rel_path: str, num_frames: int) -> CSurface:
     return _bullet_surface_cache[key]
 
 
-def _dims_player(ent):
-    from src.ecs.components.c_surface import CSurface
 
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 12.0, 8.0
-    return float(sz.w), float(sz.h)
-
-
-def _enemy_dims(ent):
-    from src.ecs.components.c_surface import CSurface
-
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 10.0, 10.0
-    return float(sz.w), float(sz.h)
-
-
-def _dims_any(ent):
-    return _enemy_dims(ent)
-
-
-def _aabb_overlap(ax, ay, aw, ah, bx, by, bw, bh):
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 
 
 def _nearest_ground_human(lx_cx, lx_cy, hz):
@@ -72,7 +43,7 @@ def _nearest_ground_human(lx_cx, lx_cy, hz):
     for ae, (apos, az, _ta) in esper.get_components(CPosition, CAstronautState, CTagAstronaut):
         if az.mode != CAstronautState.GROUND:
             continue
-        aw, ah = _dims_any(ae)
+        aw, ah = get_entity_dims(ae, fallback=(10.0, 10.0))
         tcx = apos.x + aw * 0.5 - lx_cx
         tcy = apos.y + ah * 0.5 - lx_cy
         d2 = tcx * tcx + tcy * tcy
@@ -93,7 +64,7 @@ def system_lander_ai(delta_time):
         return
     _, (ppos, _tp) = players[0]
     pe = players[0][0]
-    pw, ph = _dims_player(pe)
+    pw, ph = get_entity_dims(pe, fallback=(12.0, 8.0))
 
     sh = float(game_state.world_screen_h or 256)
     visible = aabb_in_viewport(float(ppos.x), float(ppos.y), pw, ph, margin=8.0)
@@ -102,7 +73,7 @@ def system_lander_ai(delta_time):
     for ent, (pos, vel, ai, _te, _tl) in esper.get_components(
         CPosition, CVelocity, CLanderAI, CTagEnemy, CTagLander,
     ):
-        ew, eh = _enemy_dims(ent)
+        ew, eh = get_entity_dims(ent, fallback=(10.0, 10.0))
         lx_cx = pos.x + ew * 0.5
         lx_cy = pos.y + eh * 0.5
 
@@ -128,12 +99,12 @@ def system_lander_ai(delta_time):
                     ai.capture_target_astronaut = -1
                     vel.vx = vel.vy = 0.0
                 else:
-                    aw, ah = _dims_any(te)
+                    aw, ah = get_entity_dims(te, fallback=(10.0, 10.0))
                     tcx = apos.x + aw * 0.5 - lx_cx
                     tcy = apos.y + ah * 0.5 - lx_cy
                     d = math.hypot(tcx, tcy)
                     spd = ai.approach_speed
-                    if d < 12.0 and _aabb_overlap(
+                    if d < 12.0 and aabb_overlap(
                         pos.x, pos.y, ew, eh,
                         apos.x, apos.y, aw, ah,
                     ):

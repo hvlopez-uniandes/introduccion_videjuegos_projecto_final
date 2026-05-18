@@ -5,24 +5,12 @@ import esper
 from src.ecs.components.c_astronaut_state import CAstronautState
 from src.ecs.components.c_astronaut import CAstronautFootprint
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_tags import CTagAstronaut
 from src.ecs.components.c_velocity import CVelocity
+from src.ecs.systems.collision_util import get_entity_dims
 import src.engine.game_state as game_state
 from src.engine.scenario_profile import planet_edge_screen_y
 from src.engine.scenario_query import get_planet_profile
-
-
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is None:
-        return 8.0, 10.0
-    return float(sz.w), float(sz.h)
-
 
 def system_astronaut_gravity(delta_time):
     if delta_time <= 0.0:
@@ -54,7 +42,7 @@ def system_astronaut_landing_resolve():
     ):
         if st.mode != CAstronautState.FALLING:
             continue
-        aw, ah = _dims(ae)
+        aw, ah = get_entity_dims(ae, fallback=(8.0, 10.0))
         cx = pos.x + aw * 0.5
         sy = planet_edge_screen_y(pl, cx)
         feet_y = pos.y + ah

@@ -1,4 +1,4 @@
 class CPosition:
-    def __init__(self, x=0.0, y=0.0):
-        self.x = x
-        self.y = y
+    def __init__(self, x: float = 0.0, y: float = 0.0) -> None:
+        self.x: float = x
+        self.y: float = y

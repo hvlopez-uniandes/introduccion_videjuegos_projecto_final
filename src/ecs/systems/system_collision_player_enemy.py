@@ -3,29 +3,14 @@
 import esper
 
 from src.ecs.components.c_position import CPosition
-from src.ecs.components.c_size import CSize
-from src.ecs.components.c_surface import CSurface
 from src.ecs.components.c_player_sfx import CPlayerSfx
 from src.ecs.components.c_tags import CTagEnemy, CTagPlayer
+from src.ecs.systems.collision_util import get_entity_dims, aabb_overlap
 from src.ecs.systems.spawn_explosion import spawn_explosion
 from src.ecs.systems.system_lander_ai import release_human_from_dead_lander
 from src.engine.audio_util import play_sound
 import src.engine.game_state as game_state
 from src.engine.enemy_kill_score import score_for_destroyed_enemy
-
-
-def _dims(ent):
-    s = esper.try_component(ent, CSurface)
-    if s is not None:
-        return float(s.area_w), float(s.area_h)
-    sz = esper.try_component(ent, CSize)
-    if sz is not None:
-        return float(sz.w), float(sz.h)
-    return 0.0, 0.0
-
-
-def _aabb_overlap(ax, ay, aw, ah, bx, by, bw, bh):
-    return ax < bx + bw and ax + aw > bx and ay < by + bh and ay + ah > by
 
 
 def _play_collision_sfx():
@@ -42,12 +27,12 @@ def system_collision_player_enemy():
     if not players:
         return
     pe, (ppos, _tp) = players[0]
-    pw, ph = _dims(pe)
+    pw, ph = get_entity_dims(pe)
 
     to_remove = []
     for ee, (epos, _te) in esper.get_components(CPosition, CTagEnemy):
-        ew, eh = _dims(ee)
-        if _aabb_overlap(
+        ew, eh = get_entity_dims(ee)
+        if aabb_overlap(
             ppos.x,
             ppos.y,
             pw,

@@ -337,8 +337,6 @@ def populate_astronaut_entities(cfg_dir, screen_h: int) -> None:
         return
 
     visuals = level.get("astronaut_visual", {}) if isinstance(level, dict) else {}
-    sz = visuals.get("size") or {"x": 11, "y": 16}
-    col = visuals.get("color") or {"r": 230, "g": 230, "b": 255}
     clear = float(visuals.get("clearance_px_above_terrain", 9.0))
     wobble = float(visuals.get("wobble_amplitude_px", 4.0))
     hz = float(visuals.get("wobble_hz", 0.55))
