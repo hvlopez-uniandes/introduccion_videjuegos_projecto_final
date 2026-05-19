@@ -24,6 +24,7 @@ Rúbricas y desglose por puntos: [más abajo](#rúbricas-del-proyecto-final).
 | Archivo | Contenido |
 |---------|-----------|
 | [`docs/avance-equipo.md`](docs/avance-equipo.md) | Miembros, roles y trabajo. |
+| [`docs/analisis-arquitectura-post-mortem.md`](docs/analisis-arquitectura-post-mortem.md) | **Informe grupal:** resumen, arquitectura, patrones (ECS), post-mortem. |
 | [`docs/enlace-codigo-fuente.md`](docs/enlace-codigo-fuente.md) | Repositorio Git y, si aplica, entrega en `.zip`. |
 
 ### Arquitectura

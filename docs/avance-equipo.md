@@ -3,7 +3,7 @@
 ## Datos del grupo
 
 - **Nombre del grupo:** Proyecto final Defender
-- **Última actualización:** `2026-05-06` *(lectura rápida: [**Listo / no listo / por revisar**](#estado-explicito-listo-no-listo-falta-revisar); detalle técnico: [**Resumen ejecutivo**](#resumen-hecho-pendiente); sustentación: [`guia-sustentacion.md`](guia-sustentacion.md), [`archivos-del-repositorio-sustentacion.md`](archivos-del-repositorio-sustentacion.md).)*
+- **Última actualización:** `2026-05-06` *(lectura rápida: [**Listo / no listo / por revisar**](#estado-explicito-listo-no-listo-falta-revisar); detalle técnico: [**Resumen ejecutivo**](#resumen-hecho-pendiente); informe curso: [`analisis-arquitectura-post-mortem.md`](analisis-arquitectura-post-mortem.md); sustentación: [`guia-sustentacion.md`](guia-sustentacion.md), [`archivos-del-repositorio-sustentacion.md`](archivos-del-repositorio-sustentacion.md).)*
 
 ## Meta del producto
 
