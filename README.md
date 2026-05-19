@@ -25,6 +25,7 @@ Rúbricas y desglose por puntos: [más abajo](#rúbricas-del-proyecto-final).
 |---------|-----------|
 | [`docs/avance-equipo.md`](docs/avance-equipo.md) | Miembros, roles y trabajo. |
 | [`docs/analisis-arquitectura-post-mortem.md`](docs/analisis-arquitectura-post-mortem.md) | **Informe grupal:** resumen, arquitectura, patrones (ECS), post-mortem. |
+| [`docs/presentacion-video.md`](docs/presentacion-video.md) | **Guion / guía** para el vídeo de presentación (rúbrica MISW). |
 | [`docs/entrega-publicacion-y-post-mortem.txt`](docs/entrega-publicacion-y-post-mortem.txt) | **Entrega .txt:** URL de publicación + post-mortem en texto plano. |
 | [`docs/enlace-codigo-fuente.md`](docs/enlace-codigo-fuente.md) | Repositorio Git y, si aplica, entrega en `.zip`. |
 
