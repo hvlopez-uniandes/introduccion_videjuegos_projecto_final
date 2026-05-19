@@ -1,0 +1,15 @@
+================================================================================
+  DEFENDER — MISW-4407 · PUBLICACIÓN Y EJECUTABLES
+================================================================================
+
+Grupo: Proyecto final Defender
+Integrantes: Leonardo L. Rueda · Miguel Angel Moreno Páez · Héctor López
+Actualizado: mayo 2026
+
+--------------------------------------------------------------------------------
+1. URL PÚBLICA DEL JUEGO (portal web — itch.io u otro)
+--------------------------------------------------------------------------------
+
+  URL del juego (completar tras subir a itch.io):
+https://hvmlopez.itch.io/projecto-final-introduccion-videjuegos
+

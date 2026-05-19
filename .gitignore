@@ -1,0 +1,18 @@
+# Builds locales (regenerar con scripts/build_*.sh)
+build/
+dist/
+*.spec
+
+# Python
+__pycache__/
+*.py[cod]
+.Python
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/

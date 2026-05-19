@@ -1,3 +1,4 @@
+import asyncio
 from pathlib import Path
 import random
 
@@ -21,7 +22,7 @@ from src.engine.game_state import set_paused
 import src.engine.game_state as game_state
 from src.engine.frame_input import request_hyperspace, request_shield_pulse, request_smart_bomb
 from src.engine.input_keys import pygame_key_from_string
-from src.engine.paths import set_project_root
+from src.engine.paths import resolve_project_root, set_project_root
 from src.engine.resource_services import FontService, SoundService, TextureService
 from src.engine.service_locator import ServiceLocator
 from src.engine.textures import clear_texture_cache
@@ -113,7 +114,7 @@ class GameEngine:
     _PLAY_AREA_REFERENCE_WORLD_H = 256
 
     def __init__(self, cfg_dir=None):
-        self._root = Path(__file__).resolve().parents[2]
+        self._root = resolve_project_root(Path(__file__))
         if cfg_dir is None:
             self._cfg_dir = self._root / "assets" / "cfg"
         else:
@@ -266,8 +267,15 @@ class GameEngine:
         return picked, hint_lines, text_gap
 
     def run(self):
+        """Escritorio: bucle asyncio con yield implícito vía run_async."""
+        asyncio.run(self.run_async())
+
+    def _init_pygame_session(self):
         pygame.init()
-        pygame.mixer.init()
+        try:
+            pygame.mixer.init()
+        except pygame.error:
+            pass
         set_project_root(self._root)
         self._pygame_started = True
         self._bind_services()
@@ -301,6 +309,10 @@ class GameEngine:
 
         game_state.return_to_menu()
         self.is_running = True
+
+    async def run_async(self):
+        """Web (pygbag) y escritorio: un await por frame para no bloquear el navegador."""
+        self._init_pygame_session()
 
         while self.is_running:
             self._calculate_time()
@@ -346,6 +358,7 @@ class GameEngine:
             if ph == "menu":
                 self._draw_main_menu_overlay()
                 pygame.display.flip()
+                await asyncio.sleep(0)
                 continue
 
             if ph in ("game_over", "victory"):
@@ -357,10 +370,12 @@ class GameEngine:
                 system_draw_shield_ring(self.screen)
                 self._draw_end_state_banner(ph == "victory")
                 pygame.display.flip()
+                await asyncio.sleep(0)
                 continue
 
             if ph != "play":
                 pygame.display.flip()
+                await asyncio.sleep(0)
                 continue
 
             self._fanfare_maybe()
@@ -371,6 +386,7 @@ class GameEngine:
                 self._draw_play()
                 self._draw_pause_overlay()
                 pygame.display.flip()
+                await asyncio.sleep(0)
                 continue
 
             self._update_play()
@@ -378,6 +394,7 @@ class GameEngine:
 
             self._draw_play()
             pygame.display.flip()
+            await asyncio.sleep(0)
 
         game_state.record_high_score_if_best(game_state.score)
         pygame.quit()

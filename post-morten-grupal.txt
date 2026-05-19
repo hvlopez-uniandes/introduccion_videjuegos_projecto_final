@@ -1,0 +1,1 @@
+https://github.com/hvlopez-uniandes/introduccion_videjuegos_projecto_final/blob/main/docs/analisis-arquitectura-post-mortem.md
