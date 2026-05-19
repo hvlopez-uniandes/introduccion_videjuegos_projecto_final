@@ -217,7 +217,7 @@ def build_enemy_type_defs(cfg_dir):
         subtype = str(info.get("type", "")).lower()
         try:
             if subtype == "mutant":
-            img = info["image"]
+                img = info["image"]
                 ab = info["animations"]
                 nf, clips = _parse_anim_clips(ab, loop_default=True)
                 snd = str(info["sound"]) if info.get("sound") else ""
@@ -298,16 +298,16 @@ def build_enemy_type_defs(cfg_dir):
                     )
                 else:
                     result[str(name)] = HunterEnemyDef(
-                    str(img),
-                    nf,
-                    clips,
-                    float(info["velocity_chase"]),
-                    float(info["velocity_return"]),
-                    float(info["distance_start_chase"]),
-                    float(info["distance_start_return"]),
-                    sound_path=snd,
-                    sound_chase_path=snd_chase,
-                )
+                        str(img),
+                        nf,
+                        clips,
+                        float(info["velocity_chase"]),
+                        float(info["velocity_return"]),
+                        float(info["distance_start_chase"]),
+                        float(info["distance_start_return"]),
+                        sound_path=snd,
+                        sound_chase_path=snd_chase,
+                    )
             else:
                 vmin = float(info["velocity_min"])
                 vmax = float(info["velocity_max"])
