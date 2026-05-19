@@ -1,8 +1,12 @@
 import math
+from turtle import pos
 import esper
+import random
 
 from src.ecs.components.c_animation import AnimClip, CAnimation
+from src.ecs.components.c_particle import CParticle
 from src.ecs.components.c_rotation import CRotation
+from src.ecs.components.c_shockwave import CShockwave
 from src.engine.frame_input import consume_missile
 import src.engine.game_state as game_state
 
@@ -23,6 +27,12 @@ def system_missile_launch():
     if not consume_missile():
         return
     if not game_state.consume_homing_missile_stock():
+        return
+
+    active = len(list(esper.get_component(CTagMissileHoming)))
+    max_concurrent = int(game_state.get_rule("max_concurrent_missiles", 1))
+    if active >= max_concurrent:
+        game_state.homing_missiles += 1
         return
 
     for pent, (pos, _tp) in esper.get_components(CPosition, CTagPlayer):
@@ -89,7 +99,10 @@ def _find_nearest_enemy(mx, my):
 
 
 def _blast(cx, cy, radius):
-    import random
+    sw_ent = esper.create_entity()
+    esper.add_component(sw_ent, CPosition(cx, cy))
+    esper.add_component(sw_ent, CShockwave(max_radius=radius, lifetime=0.4))
+
     to_kill = []
     for ent, _ in esper.get_component(CTagEnemy):
         c = _center(ent)
@@ -98,7 +111,6 @@ def _blast(cx, cy, radius):
         if math.hypot(c[0] - cx, c[1] - cy) <= radius:
             to_kill.append((ent, c[0], c[1]))
 
-    # Explosiones en el área aunque no haya enemigos
     for ent, ex, ey in to_kill:
         game_state.add_score(score_for_destroyed_enemy(ent))
         spawn_explosion(ex, ey)
@@ -107,7 +119,6 @@ def _blast(cx, cy, radius):
         except KeyError:
             pass
 
-    # Explosiones decorativas en anillo para mostrar el área
     num_ring = 6
     for i in range(num_ring):
         angle = (2 * math.pi / num_ring) * i
@@ -152,5 +163,32 @@ def system_missile_homing(delta_time: float):
                 vel.vy = (dy / dist) * homing.speed
 
                 rot = esper.try_component(ent, CRotation)
+                angle = rot.angle if rot is not None else 0.0
+                surf = esper.try_component(ent, CSurface)
+                if surf is not None:
+                    _spawn_missile_trail(pos, surf, angle)
+
+                rot = esper.try_component(ent, CRotation)
                 if rot is not None:
                     rot.angle = math.degrees(math.atan2(dy, dx))
+
+def _spawn_missile_trail(pos, surf, angle_deg):
+    cx = (pos.x + surf.area_w / 2.0) - 2.5
+    cy = pos.y + surf.area_h / 2.0
+
+    angle_rad = math.radians(angle_deg + 180.0)
+    offset = surf.area_w / 2.0
+    tail_x = cx + math.cos(angle_rad) * offset
+    tail_y = cy + math.sin(angle_rad) * offset
+
+    trail = esper.create_entity()
+    esper.add_component(trail, CPosition(tail_x, tail_y))
+    esper.add_component(trail, CParticle(
+        lifetime=0.18,
+        vx=random.uniform(-8.0, 8.0),
+        vy=random.uniform(-8.0, 8.0),
+        r=255,
+        g=random.randint(80, 160),
+        b=20,
+        size=random.uniform(1.5, 3.0)
+    ))

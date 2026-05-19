@@ -100,6 +100,7 @@ from src.engine.frame_input import request_hyperspace, request_shield_pulse, req
 from src.ecs.systems.system_missile_homing import system_missile_homing
 from src.ecs.systems.system_missile_homing import system_missile_homing, system_missile_launch
 from src.ecs.systems.system_hyperspace_effect import system_hyperspace_effect
+from src.ecs.systems.system_shockwave import system_shockwave
 
 def _clamp_byte(n):
     n = int(n)
@@ -661,6 +662,7 @@ class GameEngine:
         self.screen.fill(self.bg_color)
         system_scenario_draw(self.screen)
         system_draw(self.screen)
+        system_shockwave(self.delta_time, self.screen)
         system_draw_shield_ring(self.screen)
         self._draw_flash_overlay(
             "planet_explosion_flash_remaining",

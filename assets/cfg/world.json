@@ -45,5 +45,5 @@
         }
     ],
     "planet_terrain_line_points": 50,
-    "planet_parallax_factor": 1.25,
+    "planet_parallax_factor": 1.25
 }

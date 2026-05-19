@@ -316,7 +316,7 @@ def consume_homing_missile_stock() -> bool:
 
 def reset_homing_missiles() -> None:
     global homing_missiles
-    homing_missiles = int(get_rule("initial_homing_missiles", 10))
+    homing_missiles = int(get_rule("initial_homing_missiles", 8))
 
 
 def consume_fanfare_flag() -> bool:
