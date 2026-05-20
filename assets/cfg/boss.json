@@ -1,0 +1,29 @@
+{
+    "image": "assets/img/boss.png",
+    "number_frames": 5,
+    "animations": {
+        "list": [
+            {
+                "name": "IDLE",
+                "start": 0,
+                "end": 2,
+                "framerate": 6
+            },
+            {
+                "name": "ATTACK",
+                "start": 3,
+                "end": 4,
+                "framerate": 10
+            }
+        ]
+    },
+    "health": 10,
+    "teleport_interval_sec": 4.0,
+    "ray_charge_sec": 1.109,
+    "ray_rotate_speed_deg_s": 45.0,
+    "ray_duration_sec": 2.5,
+    "aim_duration_sec": 1.109,
+    "sound_teleport": "assets/snd/hyperspace.ogg",
+    "sound_ray": "assets/snd/laser.ogg",
+    "sound_charge": "assets/snd/carga.ogg"
+}

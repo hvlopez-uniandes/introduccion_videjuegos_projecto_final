@@ -71,3 +71,6 @@ class CTagHudDynamic:
 
 class CTagMissileHoming:
     """Misil de rastreo con daño en área."""
+
+class CTagBoss:
+    """Entidad boss."""

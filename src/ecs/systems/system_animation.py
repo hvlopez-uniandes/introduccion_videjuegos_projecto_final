@@ -1,10 +1,13 @@
 import esper
 
 from src.ecs.components.c_animation import CAnimation
+from src.ecs.components.c_tags import CTagBoss
 
 
 def system_animation(delta_time):
-    for _ent, anim in esper.get_component(CAnimation):
+    for ent, anim in esper.get_component(CAnimation):
+        if esper.try_component(ent, CTagBoss) is not None:
+            continue
         if anim.finished:
             continue
         clip = anim.clips[anim.current_name]

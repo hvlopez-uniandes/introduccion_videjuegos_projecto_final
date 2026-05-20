@@ -1,3 +1,4 @@
+import json
 from pathlib import Path
 import random
 
@@ -101,6 +102,10 @@ from src.ecs.systems.system_missile_homing import system_missile_homing
 from src.ecs.systems.system_missile_homing import system_missile_homing, system_missile_launch
 from src.ecs.systems.system_hyperspace_effect import system_hyperspace_effect
 from src.ecs.systems.system_shockwave import system_shockwave
+from src.ecs.components.c_boss import CBoss
+from src.ecs.components.c_tags import CTagBoss
+from src.ecs.systems.system_boss import system_boss_update, system_boss_draw
+from src.ecs.systems.system_boss import system_boss_update, system_boss_draw, system_boss_bullet_collision
 
 def _clamp_byte(n):
     n = int(n)
@@ -531,6 +536,21 @@ class GameEngine:
         self._setup_interface_entities()
         set_paused(False)
 
+        boss_cfg = json.loads((self._cfg_dir / "boss.json").read_text(encoding="utf-8"))
+        boss_ent = esper.create_entity()
+        tex = ServiceLocator.current().get("textures").load(boss_cfg["image"])
+        from src.ecs.components.c_animation import AnimClip
+        nf = boss_cfg["number_frames"]
+        clips = {a["name"]: AnimClip(
+            a["name"], a["start"], a["end"], a["framerate"],
+            loops=False if a["name"] == "ATTACK" else True
+        ) for a in boss_cfg["animations"]["list"]}
+        esper.add_component(boss_ent, CPosition(self.screen_w / 2.0, 90.0))
+        esper.add_component(boss_ent, CSurface(tex, nf))
+        esper.add_component(boss_ent, CAnimation(nf, clips, initial="IDLE"))
+        esper.add_component(boss_ent, CBoss(boss_cfg))
+        esper.add_component(boss_ent, CTagBoss())
+
     def _setup_interface_entities(self):
         iface = self._iface
         fonts = ServiceLocator.current().get("fonts")
@@ -646,6 +666,8 @@ class GameEngine:
         system_player_move_sound()
         system_shield_hud_refresh()
         system_hyperspace_effect(self.delta_time)
+        system_boss_update(self.delta_time, self.screen_w, self.screen_h)
+        system_boss_bullet_collision()
         self._layout_play_hints_corner()
         if game_state.planet_explosion_flash_remaining > 0.0:
             game_state.planet_explosion_flash_remaining = max(
@@ -661,6 +683,7 @@ class GameEngine:
     def _draw_play(self):
         self.screen.fill(self.bg_color)
         system_scenario_draw(self.screen)
+        system_boss_draw(self.screen, self.screen_w, self.screen_h)
         system_draw(self.screen)
         system_shockwave(self.delta_time, self.screen)
         system_draw_shield_ring(self.screen)
